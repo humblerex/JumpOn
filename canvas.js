@@ -96,7 +96,7 @@ function Player(size){
              c.font = "20px Arial";
              c.fillStyle = "white";
              c.fillText("Game Over! Press 'R' to restart.",canvas.width/2-150,canvas.height/2);
-             console.log("Game Over \n Press R to restart.");
+            // console.log("Game Over \n Press R to restart.");
         }            
         
     }
