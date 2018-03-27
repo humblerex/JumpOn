@@ -88,15 +88,9 @@ function Player(size){
         this.dy += gravity;
         this.x += this.dx;
         this.draw();}
-        else{
-             
-              for(var i=0;i<food.length;i++)
-                  {food[i].hide();}
-             player.hide();
-             c.font = "20px Arial";
-             c.fillStyle = "white";
-             c.fillText("Game Over! Press 'R' to restart.",canvas.width/2-150,canvas.height/2);
-            // console.log("Game Over \n Press R to restart.");
+        else{             
+            //function game over
+              gameOver();
         }            
         
     }
@@ -126,18 +120,80 @@ function Player(size){
     
 }
 
+function gameOver(){
+            
+             for(var i=0;i<food.length;i++)
+                  {food.splice(i,1);}
+             player.hide();
+             c.font = "20px Arial";
+             c.fillStyle = "white";
+             c.fillText("Game Over! Press 'R' to restart.",canvas.width/2-150,canvas.height/2);
+     
+}
+
 
 function init(){
     player = new Player(9);
     for(var i = 0;i<2;i++){  
-   var size = getRandom(3,6);
+    var size = getRandom(3,6);
     food[i] = new Food(size);
  }
 }
 
+function Enemy(x,y){
+    this.x = x;
+    this.y = y;
+    this.speed = 1;
+    this.color = "red";
+    this.size = 20;
+    
+    this.draw = function(){
+        c.beginPath();
+        c.arc(this.x,this.y,this.size,0,Math.PI*2,false);
+        c.fillStyle = this.color;
+        c.fill();
+    }
+    
+    this.update = function(){
+        
+        var movx = this.x - player.x;
+        var movy = this.y - player.y;
+        
+        
+        if(movx > 0)
+        {
+         this.x -= 0.5;   
+        }
+        else{
+            this.x += 0.5;  
+        }
+        
+        if(movy > 0)
+        {
+         this.y -= 0.5;   
+        }
+        else{
+            this.y += 0.5;  
+        }
+        
+        var distance = Math.sqrt(Math.pow((movx),2) +                        Math.pow((movy),2));
+    
+        var r = this.size + player.size;
+        
+        if(r >= distance)
+        {
+            gameOver();
+        }
+        
+        
+        this.draw();
+    }
+    
+}
 
-
-
+var x = getRandom(50,canvas.width-50);
+var y = getRandom(50,canvas.height-50);
+var enemy = new Enemy(x,y);
 
 //LISTENERS
 
@@ -158,10 +214,10 @@ else if(event.charCode == 100) //d
 else if(event.charCode == 119) //w
     player.jump();
 
-else if(event.charCode == 112) //w
+else if(event.charCode == 112) //p
  player.togglePause();
 
-else if(event.charCode == 114) //w
+else if(event.charCode == 114) //r
   restart();   
     
 //console.log(event);
@@ -188,13 +244,14 @@ function animate(){
     for(var i = 0;i<food.length;i++)
         {food[i].update();}
     
+    enemy.update();
 
     c.font = "20px Arial";
     c.fillStyle = "white";
     c.fillText("Score: "+score,0,20);
     
     c.font = "10px Arial";    
-    c.fillText("Made with <3 by Ashwani Dubey",canvas.width/2,canvas.height-5);        
+    c.fillText("Made with ♥ by Ashwani Dubey",canvas.width/2,canvas.height-5);        
 }
 else{
     c.font = "20px Arial";
