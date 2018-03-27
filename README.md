@@ -17,6 +17,8 @@ d: for right jump
 
 p: pause game
 
+r: restart game
+
 # Contributions
 
 Most Welcome :)
